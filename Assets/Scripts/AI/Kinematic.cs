@@ -26,16 +26,6 @@ public struct Kinematic
 /// </summary>
     public  float       rotation;
 
-/// <summary>
-/// Init this instance. Pseudo constructor
-/// </summary>
-    public void Init ()
-    {
-        position = Vector3.zero;
-        velocity = Vector3.zero;
-        orientation = 0.0f;
-        rotation = 0.0f;
-    }
 
 /// <summary>
 /// Updates the structure given the steering and time.
@@ -48,10 +38,10 @@ public struct Kinematic
 /// </param>
     public void Update (SteeringOutput steering, float time)
     {
-        position += velocity;
-        orientation += rotation;
-        velocity += steering.linear * time;
-        rotation += steering.angular * time;
+        position += (velocity * time);
+        orientation += (rotation * time);
+        velocity += (steering.linear * time);
+        rotation += (steering.angular * time);
     }
 
 /// <summary>
@@ -68,8 +58,8 @@ public struct Kinematic
 /// </param>
     public void Update (SteeringOutput steering, float maxSpeed, float time)
     {
-        position += velocity;
-        orientation += rotation;
+        position += velocity * time;
+        orientation += rotation * time;
         if (velocity.sqrMagnitude > maxSpeed*maxSpeed)
         {
             velocity = velocity.normalized * maxSpeed;
@@ -94,7 +84,7 @@ public struct Kinematic
     public static float GetNewOrientation (float currentOrientation, Vector3 velocity)
     {
         if (velocity.sqrMagnitude > 0.0f)
-            return Mathf.Atan2(-velocity.x, velocity.z);
+            return Mathf.Atan2(velocity.z, velocity.x);
         return currentOrientation;
     }
 /// <summary>
@@ -108,7 +98,8 @@ public struct Kinematic
 /// </param>
     public static Quaternion GetOrientQuat (float orientation)
     {
-        Vector3 v = new Vector3(Mathf.Cos(orientation), 0.0f, Mathf.Sin(orientation));
-        return Quaternion.LookRotation(v);
+        Vector3 v = new Vector3(Mathf.Sin(orientation), 0.0f, Mathf.Cos(orientation));
+        Quaternion rotation = Quaternion.LookRotation(v);
+        return rotation;
     }
 }

@@ -6,60 +6,30 @@ public class Follower : Agent
 
     private Behavior    m_KSeek;
     private Kinematic   m_CharKinematic;
+    private GameObject  m_Player;
 	// Use this for initialization
-	void Start ()
+	public override void Start ()
 	{
+        base.Start();
         m_KSeek = new KSeek();
+        m_Player = GameObject.FindGameObjectWithTag("Player");
     }
 
 	// Update is called once per frame
     public override void Update ()
 	{
 		//Debug.DrawRay(transform.position+Vector3.up, transform.forward*m_DebugRayLenght, m_DebugRayColor);
-		GameObject player = GameObject.FindGameObjectWithTag("Player");
-        m_CharKinematic = player.GetComponent<Agent>().Kinematic;
-        m_KSeek.SetKSeek(ref m_Kinematic, m_CharKinematic, m_MaxSpeed);
+        m_CharKinematic = m_Player.GetComponent<Agent>().Kinematic;
+        m_KSeek.SetKSeek(m_Kinematic, m_CharKinematic, m_MaxSpeed);
         m_Steering = m_KSeek.GetSteering();
         m_Kinematic.Update(m_Steering, m_MaxSpeed, Time.deltaTime);
-        Debug.Log(m_MaxSpeed);
-/*
-        // TOMACO
-        float avoidDistance = 2f; //0.5f
-        float lookAhead = 3f; //2s
-        Vector3 rayVector = transform.forward;
-        rayVector.Normalize();
-        rayVector *= lookAhead;
-        RaycastHit hit;
-        Debug.DrawRay(transform.position+Vector3.up, transform.forward*lookAhead, Color.cyan);
-
-        LayerMask stuffToCheck = (1 << LayerMask.NameToLayer("Obstacles"));
-        if (Physics.Raycast(transform.position, rayVector, out hit, lookAhead, stuffToCheck)) //~LayerMask.NameToLayer("Obstacles")))
-        {
-            if (hit.collider.tag == "Wall")
-            {
-                //Debug.Log("BUUU")
-                Debug.DrawRay(hit.point, hit.normal*avoidDistance, Color.magenta);
-                Vector3 newpos = (hit.point + hit.normal)*avoidDistance - transform.position;
-                // TODO:    retrieve the normal, create new target and shit
-                //          DO NOT do it for me >_< I just wanna see the f*cking ray
-                //          but i'm coding blind. #nowplaying Korn - Blind.
-                //Kinematic newtarget = new Kinematic(hit.point+hit.normal * avoidDistance, Vector3.zero, 0, 0);
-                //m_Behav = new KSeek(m_Kinematic, newtarget, m_MaxSpeed, npc.transform);
-                //SteeringOutput newSteering = m_Behav.GetSteering();
-                //m_Steering.m_Linear = newSteering.m_Linear;
-                m_Translation += newpos*2f;
-            }
-        //else
-             //Debug.DrawRay(npcPos, rayVector, Color.green);
-        }
-        else
-        {
-            //Debug.DrawRay(npcPos, rayVector, Color.magenta);
-        }
-        // END OF TOMACO
-*/
-
-        base.Update ();
+        //transform.position = m_Kinematic.position;
+        //transform.rotation = Kinematic.GetOrientQuat(m_Kinematic.orientation);
+        //MetaUpdate();
+        base.Update();
+        //Vector3 m_Vel = m_Player.transform.position - transform.position;
+        //m_Vel = m_Vel.normalized * m_MaxSpeed * Time.deltaTime;
+        //transform.Translate(m_Vel, Space.World);
 	}
 	
 	void OnDrawGizmos ()

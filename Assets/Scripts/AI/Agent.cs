@@ -5,7 +5,7 @@ public class Agent : MonoBehaviour
 {
     public      float   m_DebugRayLenght = 1.0f;
     public      Color   m_DebugRayColor = Color.red;
-    public      float   m_MaxSpeed = 0.3f;
+    public      float   m_MaxSpeed = 3.0f;
     protected   Kinematic m_Kinematic;
     protected   SteeringOutput m_Steering;
 
@@ -34,6 +34,12 @@ public class Agent : MonoBehaviour
     
     // Update is called once per frame
     public virtual void Update ()
+    {
+        transform.position = m_Kinematic.position;
+        transform.rotation = Kinematic.GetOrientQuat(m_Kinematic.orientation);
+    }
+
+    public void MetaUpdate ()
     {
         transform.position = m_Kinematic.position;
         transform.rotation = Kinematic.GetOrientQuat(m_Kinematic.orientation);

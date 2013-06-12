@@ -10,7 +10,7 @@ public class Behavior
         return empty;
     }
 
-    public virtual void SetKSeek (ref Kinematic character, Kinematic target, float maxSpeed) {}
+    public virtual void SetKSeek (Kinematic character, Kinematic target, float maxSpeed) {}
 
     public virtual void SetKFlee (ref Kinematic character, Kinematic target, float maxSpeed) {}
 }

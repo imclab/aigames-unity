@@ -18,7 +18,7 @@ public class KSeek : Behavior
 /// <param name='maxSpeed'>
 /// Max speed.
 /// </param>
-    public override void SetKSeek (ref Kinematic character, Kinematic target, float maxSpeed)
+    public override void SetKSeek ( Kinematic character, Kinematic target, float maxSpeed)
     {
         m_Character = character;
         m_Target = target;
@@ -29,8 +29,10 @@ public class KSeek : Behavior
     {
         SteeringOutput steering;
         steering.linear = m_Target.position - m_Character.position;
-        steering.linear = steering.linear.normalized * m_MaxSpeed;
-        m_Character.orientation = Kinematic.GetNewOrientation(m_Character.orientation, steering.linear);
+        steering.linear.Normalize();
+        steering.linear *= m_MaxSpeed;
+        //m_Character.orientation = Kinematic.GetNewOrientation(m_Character.orientation, steering.linear);
+        m_Character.orientation = 1.234f;
         steering.angular = 0;
         return steering;
     }
